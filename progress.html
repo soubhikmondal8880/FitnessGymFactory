@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress Track</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: rgb(231, 201, 157);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            animation: fadeIn 1s ease-in-out;
+            overflow-y: scroll;
+        }
+
+        h1 {
+            color: #333;
+            margin: 20px 0;
+            font-size: 2.5em;
+            text-align: center;
+            animation: slideIn 1s ease-in-out;
+        }
+
+        .progress-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 600px;
+            margin: 20px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .progress-bar {
+            background: #ddd;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress {
+            height: 20px;
+            border-radius: 20px;
+            text-align: center;
+            line-height: 20px;
+            color: white;
+            animation: fillBar 2s forwards;
+        }
+
+        @keyframes fillBar {
+            from { width: 0; }
+            to { width: var(--progress); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-20px); }
+            to { transform: translateY(0); }
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            margin: 20px;
+            max-width: 250px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+
+        th, td {
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        .chart-container {
+            width: 250px;
+            height: 250px;
+            margin: 20px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8em;
+            }
+            .progress-container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Progress Tracking Dashboard</h1>
+
+    <div class="progress-container">
+        <h2>Heart Rate</h2>
+        <div class="progress-bar" style="--progress: 70%;">
+            <div class="progress" style="background-color: #1a73e8;">70%</div>
+        </div>
+
+        <h2>Blood Pressure</h2>
+        <div class="progress-bar" style="--progress: 80%;">
+            <div class="progress" style="background-color: #ff6b6b;">80%</div>
+        </div>
+
+        <h2>Calcium Level</h2>
+        <div class="progress-bar" style="--progress: 60%;">
+            <div class="progress" style="background-color: #4caf50;">60%</div>
+        </div>
+
+        <h2>Cholesterol Level</h2>
+        <div class="progress-bar" style="--progress: 75%;">
+            <div class="progress" style="background-color: #ff9800;">75%</div>
+        </div>
+    </div>
+
+    <div class="table-container" style="position: absolute; top: 20px; right: 20px;">
+        <h3>Health Metrics</h3>
+        <table>
+            <tr>
+                <th>Metric</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Heart Rate</td>
+                <td>70 bpm</td>
+            </tr>
+            <tr>
+                <td>Blood Pressure</td>
+                <td>120/80 mmHg</td>
+            </tr>
+            <tr>
+                <td>Calcium Level</td>
+                <td>9.2 mg/dL</td>
+            </tr>
+            <tr>
+                <td>Cholesterol</td>
+                <td>190 mg/dL</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="chart-container" style="position: absolute; bottom: 20px; left: 20px;">
+        <canvas id="healthPieChart"></canvas>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('healthPieChart').getContext('2d');
+        const healthPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Heart Rate', 'Blood Pressure', 'Calcium Level', 'Cholesterol Level'],
+                datasets: [{
+                    label: 'Health Status',
+                    data: [70, 80, 60, 75],
+                    backgroundColor: ['#1a73e8', '#ff6b6b', '#4caf50', '#ff9800'],
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Tracking Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to right, #e3f2fd, #bbdefb);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            position: relative;
+        }
+        .tracking-box {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+        .tracking-message {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        .progress-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 20px 0;
+            position: relative;
+            height: 25px;
+        }
+        .progress-bar {
+            height: 100%;
+            width: 0;
+            border-radius: 20px;
+            transition: width 0.5s ease;
+        }
+        .metric-label {
+            font-size: 18px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 5px;
+            text-align: left;
+        }
+        .percentage {
+            position: absolute;
+            right: 10px;
+            top: 3px;
+            font-weight: 600;
+            color: white;
+        }
+        .table-chart {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            font-size: 14px;
+            max-width: 150px;
+            z-index: 1;
+        }
+        .table-chart table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .small-pie-chart {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 10px;
+            width: 150px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-in-out;
+        }
+        .small-pie-chart canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+    </style>
+    <script>
+        function simulateHealthTracking() {
+            const progressBars = {
+                heartRate: { elem: document.getElementById("heart-rate-bar"), value: 75, color: "#28a745" },
+                calcium: { elem: document.getElementById("calcium-bar"), value: 80, color: "#ffca28" },
+                bloodPressure: { elem: document.getElementById("blood-pressure-bar"), value: 60, color: "#dc3545" }
+            };
+
+            Object.keys(progressBars).forEach((metric, index) => {
+                setTimeout(() => {
+                    progressBars[metric].elem.style.width = progressBars[metric].value + "%";
+                    progressBars[metric].elem.style.backgroundColor = progressBars[metric].color;
+                    document.getElementById(`${metric}-percentage`).textContent = progressBars[metric].value + "%";
+                    document.getElementById(`${metric}-value`).textContent = `${metric.charAt(0).toUpperCase() + metric.slice(1)}: ${progressBars[metric].value}%`;
+                }, index * 1000);
+            });
+
+            setTimeout(() => {
+                document.getElementById("tracking-message").textContent = "Tracking Complete!";
+                createSmallPieChart();
+            }, 3000);
+        }
+
+        function createSmallPieChart() {
+            const ctx = document.getElementById('smallHealthChart').getContext('2d');
+            const smallHealthChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Heart Rate', 'Calcium Level', 'Blood Pressure'],
+                    datasets: [{
+                        label: 'Health Metrics',
+                        data: [75, 80, 60],
+                        backgroundColor: ['#28a745', '#ffca28', '#dc3545'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                    }
+                }
+            });
+        }
+
+        window.onload = simulateHealthTracking;
+    </script>
+</head>
+<body>
+
+    <div class="tracking-box">
+        <p id="tracking-message" class="tracking-message">Tracking your health metrics...</p>
+
+        <p class="metric-label">Heart Rate</p>
+        <div class="progress-container">
+            <div id="heart-rate-bar" class="progress-bar"></div>
+            <div id="heart-rate-percentage" class="percentage"></div>
+        </div>
+        <p id="heart-rate-value"></p>
+
+        <p class="metric-label">Calcium Level</p>
+        <div class="progress-container">
+            <div id="calcium-bar" class="progress-bar"></div>
+            <div id="calcium-percentage" class="percentage"></div>
+        </div>
+        <p id="calcium-value"></p>
+
+        <p class="metric-label">Blood Pressure</p>
+        <div class="progress-container">
+            <div id="blood-pressure-bar" class="progress-bar"></div>
+            <div id="blood-pressure-percentage" class="percentage"></div>
+        </div>
+        <p id="blood-pressure-value"></p>
+    </div>
+
+    <!-- Small Table Chart -->
+    <div class="table-chart">
+        <h4>Health Metrics</h4>
+        <table>
+            <tr>
+                <th>Metric</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Heart Rate</td>
+                <td id="heart-rate-table">75%</td>
+            </tr>
+            <tr>
+                <td>Calcium</td>
+                <td id="calcium-table">80%</td>
+            </tr>
+            <tr>
+                <td>Blood Pressure</td>
+                <td id="blood-pressure-table">60%</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Small Pie Chart -->
+    <div class="small-pie-chart">
+        <canvas id="smallHealthChart"></canvas>
+    </div>
+
+</body>
+</html>
